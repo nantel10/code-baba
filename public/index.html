@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#f59e0b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Code-Baba">
+  
+  <title>Code-Baba</title>
+  
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      min-height: 100vh;
+      color: #1f2937;
+    }
+    
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .logo-icon {
+      font-size: 48px;
+      margin-bottom: 8px;
+    }
+    
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1f2937;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #374151;
+      font-size: 14px;
+    }
+    
+    input, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+    }
+    
+    textarea {
+      resize: none;
+      height: 120px;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .btn:active {
+      transform: scale(0.98);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+    }
+    
+    .btn-primary:hover {
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+    }
+    
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+    }
+    
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .status {
+      text-align: center;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    
+    .status.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .status.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .status.info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .hidden {
+      display: none !important;
+    }
+    
+    .messages-list {
+      margin-top: 20px;
+    }
+    
+    .message-item {
+      padding: 16px;
+      background: #f9fafb;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+    
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .message-sender {
+      font-weight: 600;
+      color: #d97706;
+      font-size: 14px;
+    }
+    
+    .message-time {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    
+    .message-text {
+      color: #374151;
+      line-height: 1.5;
+    }
+    
+    .member-list {
+      margin-top: 16px;
+    }
+    
+    .member-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      background: #f9fafb;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    
+    .member-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      margin-right: 12px;
+    }
+    
+    .member-info {
+      flex: 1;
+    }
+    
+    .member-name {
+      font-weight: 600;
+      color: #1f2937;
+    }
+    
+    .member-joined {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: #f3f4f6;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #6b7280;
+      transition: all 0.2s;
+    }
+    
+    .tab.active {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+    }
+    
+    .install-prompt {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .install-prompt button {
+      margin-top: 12px;
+      padding: 10px 20px;
+      background: #f59e0b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .char-count {
+      text-align: right;
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #9ca3af;
+    }
+    
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+    
+    .setup-guide {
+      background: #fffbeb;
+      border: 2px solid #fcd34d;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+    
+    .setup-guide h3 {
+      font-size: 16px;
+      margin-bottom: 16px;
+      color: #92400e;
+    }
+    
+    .setup-step {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .setup-step:last-of-type {
+      margin-bottom: 0;
+    }
+    
+    .step-number {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    
+    .step-content {
+      flex: 1;
+    }
+    
+    .step-content strong {
+      display: block;
+      color: #1f2937;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    
+    .step-content p {
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.4;
+      margin: 0;
+    }
+    
+    .icon-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: #3b82f6;
+      color: white;
+      border-radius: 4px;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Join Screen -->
+    <div id="join-screen" class="card">
+      <div class="logo">
+        <div class="logo-icon">🧙</div>
+        <h1>Code-Baba</h1>
+        <p class="subtitle">Instant notifications for your crew</p>
+      </div>
+      
+      <div id="join-status" class="status hidden"></div>
+      
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" placeholder="What should we call you?" maxlength="30">
+      </div>
+      
+      <div class="form-group">
+        <label for="code">Invite Code</label>
+        <input type="text" id="code" placeholder="Enter group or admin code" autocapitalize="characters">
+      </div>
+      
+      <button id="join-btn" class="btn btn-primary">Join Group</button>
+    </div>
+    
+    <!-- Main App Screen -->
+    <div id="app-screen" class="hidden">
+      <div class="card">
+        <div class="logo">
+          <div class="logo-icon">🧙</div>
+          <h1>Code-Baba</h1>
+        </div>
+        
+        <div id="install-banner" class="install-prompt hidden">
+          <strong>📱 Install the app</strong>
+          <p>Add to your home screen for the best experience</p>
+          <button id="install-btn">Install</button>
+        </div>
+        
+        <!-- Admin only: Send message -->
+        <div id="admin-section" class="hidden">
+          <div class="tabs">
+            <button class="tab active" data-tab="send">Send</button>
+            <button class="tab" data-tab="messages">Messages</button>
+            <button class="tab" data-tab="members">Members</button>
+          </div>
+          
+          <div id="send-tab">
+            <div id="send-status" class="status hidden"></div>
+            
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" placeholder="Write your message to the group..." maxlength="500"></textarea>
+              <div class="char-count"><span id="char-count">0</span>/500</div>
+            </div>
+            
+            <button id="send-btn" class="btn btn-primary">📢 Send to Everyone</button>
+          </div>
+          
+          <div id="messages-tab" class="hidden">
+            <div id="messages-list" class="messages-list">
+              <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <p>No messages yet</p>
+              </div>
+            </div>
+          </div>
+          
+          <div id="members-tab" class="hidden">
+            <div id="members-list" class="member-list">
+              <div class="empty-state">
+                <div class="empty-state-icon">👥</div>
+                <p>No members yet</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Member view -->
+        <div id="member-section" class="hidden">
+          <div id="member-status" class="status success">
+            ✅ You're all set! You'll receive notifications when there's an update.
+          </div>
+          
+          <div id="setup-instructions" class="setup-guide">
+            <h3>📱 Get the best experience</h3>
+            
+            <div class="setup-step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <strong>Add to Home Screen</strong>
+                <p>Tap the <span class="icon-badge">↑</span> Share button at the bottom of Safari, then tap "Add to Home Screen"</p>
+              </div>
+            </div>
+            
+            <div class="setup-step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <strong>Enable Notifications</strong>
+                <p>Go to <strong>Settings → Notifications → Safari</strong> and make sure notifications are turned on</p>
+              </div>
+            </div>
+            
+            <div class="setup-step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <strong>Keep it open once</strong>
+                <p>Open the app from your home screen at least once to activate push notifications</p>
+              </div>
+            </div>
+            
+            <button id="dismiss-setup" class="btn btn-secondary" style="margin-top: 12px;">Got it!</button>
+          </div>
+          
+          <h3 style="margin: 20px 0 12px; font-size: 16px;">Recent Messages</h3>
+          <div id="member-messages-list" class="messages-list">
+            <div class="empty-state">
+              <div class="empty-state-icon">📭</div>
+              <p>No messages yet</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // App state
+    let isAdmin = false;
+    let userName = '';
+    let adminCode = '';
+    let deferredPrompt = null;
+    
+    // DOM elements
+    const joinScreen = document.getElementById('join-screen');
+    const appScreen = document.getElementById('app-screen');
+    const joinBtn = document.getElementById('join-btn');
+    const sendBtn = document.getElementById('send-btn');
+    const nameInput = document.getElementById('name');
+    const codeInput = document.getElementById('code');
+    const messageInput = document.getElementById('message');
+    const charCount = document.getElementById('char-count');
+    const adminSection = document.getElementById('admin-section');
+    const memberSection = document.getElementById('member-section');
+    const installBanner = document.getElementById('install-banner');
+    const installBtn = document.getElementById('install-btn');
+    
+    // Initialize
+    async function init() {
+      // Check if already joined
+      const savedData = localStorage.getItem('codeBaba');
+      if (savedData) {
+        const data = JSON.parse(savedData);
+        userName = data.name;
+        isAdmin = data.isAdmin;
+        adminCode = data.adminCode || '';
+        showAppScreen();
+      }
+      
+      // Register service worker
+      if ('serviceWorker' in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.register('/sw.js');
+          console.log('Service Worker registered');
+        } catch (error) {
+          console.error('Service Worker registration failed:', error);
+        }
+      }
+      
+      // Handle install prompt
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBanner.classList.remove('hidden');
+      });
+      
+      installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const result = await deferredPrompt.userChoice;
+          deferredPrompt = null;
+          installBanner.classList.add('hidden');
+        }
+      });
+    }
+    
+    // Join family
+    joinBtn.addEventListener('click', async () => {
+      const name = nameInput.value.trim();
+      const code = codeInput.value.trim().toUpperCase();
+      
+      if (!name || !code) {
+        showStatus('join-status', 'Please enter your name and invite code', 'error');
+        return;
+      }
+      
+      joinBtn.disabled = true;
+      joinBtn.textContent = 'Joining...';
+      
+      try {
+        // Verify code first
+        const verifyRes = await fetch('/api/verify-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code })
+        });
+        const verifyData = await verifyRes.json();
+        
+        if (!verifyData.valid) {
+          showStatus('join-status', 'Invalid invite code. Please check and try again.', 'error');
+          joinBtn.disabled = false;
+          joinBtn.textContent = 'Join Group';
+          return;
+        }
+        
+        // Request notification permission
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+          showStatus('join-status', 'Please allow notifications to receive group updates', 'error');
+          joinBtn.disabled = false;
+          joinBtn.textContent = 'Join Group';
+          return;
+        }
+        
+        // Get VAPID key and subscribe
+        const vapidRes = await fetch('/api/vapid-public-key');
+        const { publicKey } = await vapidRes.json();
+        
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(publicKey)
+        });
+        
+        // Register with server
+        const subRes = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            subscription,
+            name,
+            code
+          })
+        });
+        const subData = await subRes.json();
+        
+        if (subData.success) {
+          isAdmin = subData.isAdmin;
+          userName = name;
+          if (isAdmin) adminCode = code;
+          
+          localStorage.setItem('codeBaba', JSON.stringify({
+            name,
+            isAdmin,
+            adminCode: isAdmin ? code : ''
+          }));
+          
+          showAppScreen();
+        } else {
+          throw new Error(subData.error || 'Failed to join');
+        }
+      } catch (error) {
+        console.error('Join error:', error);
+        showStatus('join-status', 'Failed to join. Please try again.', 'error');
+        joinBtn.disabled = false;
+        joinBtn.textContent = 'Join Group';
+      }
+    });
+    
+    // Send message
+    sendBtn.addEventListener('click', async () => {
+      const message = messageInput.value.trim();
+      
+      if (!message) {
+        showStatus('send-status', 'Please enter a message', 'error');
+        return;
+      }
+      
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'Sending...';
+      
+      try {
+        const res = await fetch('/api/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message,
+            adminCode,
+            senderName: userName
+          })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          showStatus('send-status', `✅ Sent to ${data.results.sent} member(s)!`, 'success');
+          messageInput.value = '';
+          charCount.textContent = '0';
+          loadMessages();
+        } else {
+          throw new Error(data.error || 'Failed to send');
+        }
+      } catch (error) {
+        console.error('Send error:', error);
+        showStatus('send-status', 'Failed to send. Please try again.', 'error');
+      }
+      
+      sendBtn.disabled = false;
+      sendBtn.textContent = '📢 Send to Everyone';
+    });
+    
+    // Character counter
+    messageInput.addEventListener('input', () => {
+      charCount.textContent = messageInput.value.length;
+    });
+    
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabName = tab.dataset.tab;
+        
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        document.getElementById('send-tab').classList.add('hidden');
+        document.getElementById('messages-tab').classList.add('hidden');
+        document.getElementById('members-tab').classList.add('hidden');
+        document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+        
+        if (tabName === 'messages') loadMessages();
+        if (tabName === 'members') loadMembers();
+      });
+    });
+    
+    // Show app screen
+    function showAppScreen() {
+      joinScreen.classList.add('hidden');
+      appScreen.classList.remove('hidden');
+      
+      if (isAdmin) {
+        adminSection.classList.remove('hidden');
+        memberSection.classList.add('hidden');
+        loadMessages();
+        loadMembers();
+      } else {
+        adminSection.classList.add('hidden');
+        memberSection.classList.remove('hidden');
+        loadMemberMessages();
+      }
+    }
+    
+    // Load messages
+    async function loadMessages() {
+      try {
+        const res = await fetch('/api/messages');
+        const messages = await res.json();
+        
+        const list = document.getElementById('messages-list');
+        
+        if (messages.length === 0) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📭</div>
+              <p>No messages yet</p>
+            </div>
+          `;
+          return;
+        }
+        
+        list.innerHTML = messages.map(msg => `
+          <div class="message-item">
+            <div class="message-header">
+              <span class="message-sender">${escapeHtml(msg.sender)}</span>
+              <span class="message-time">${formatTime(msg.sentAt)}</span>
+            </div>
+            <div class="message-text">${escapeHtml(msg.text)}</div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('Failed to load messages:', error);
+      }
+    }
+    
+    // Load member messages
+    async function loadMemberMessages() {
+      try {
+        const res = await fetch('/api/messages');
+        const messages = await res.json();
+        
+        const list = document.getElementById('member-messages-list');
+        
+        if (messages.length === 0) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📭</div>
+              <p>No messages yet</p>
+            </div>
+          `;
+          return;
+        }
+        
+        list.innerHTML = messages.map(msg => `
+          <div class="message-item">
+            <div class="message-header">
+              <span class="message-sender">${escapeHtml(msg.sender)}</span>
+              <span class="message-time">${formatTime(msg.sentAt)}</span>
+            </div>
+            <div class="message-text">${escapeHtml(msg.text)}</div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('Failed to load messages:', error);
+      }
+    }
+    
+    // Load members (admin only)
+    async function loadMembers() {
+      try {
+        const res = await fetch('/api/members', {
+          headers: { 'X-Admin-Code': adminCode }
+        });
+        const members = await res.json();
+        
+        const list = document.getElementById('members-list');
+        
+        if (members.length === 0) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">👥</div>
+              <p>No members yet</p>
+            </div>
+          `;
+          return;
+        }
+        
+        list.innerHTML = members.map(member => `
+          <div class="member-item">
+            <div class="member-avatar">${member.name.charAt(0).toUpperCase()}</div>
+            <div class="member-info">
+              <div class="member-name">${escapeHtml(member.name)} ${member.isAdmin ? '👑' : ''}</div>
+              <div class="member-joined">Joined ${formatDate(member.joinedAt)}</div>
+            </div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('Failed to load members:', error);
+      }
+    }
+    
+    // Utility functions
+    function showStatus(elementId, message, type) {
+      const el = document.getElementById(elementId);
+      el.textContent = message;
+      el.className = `status ${type}`;
+      el.classList.remove('hidden');
+      
+      if (type === 'success') {
+        setTimeout(() => el.classList.add('hidden'), 3000);
+      }
+    }
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    function formatTime(isoString) {
+      const date = new Date(isoString);
+      const now = new Date();
+      const diff = now - date;
+      
+      if (diff < 60000) return 'Just now';
+      if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+      if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+      
+      return date.toLocaleDateString();
+    }
+    
+    function formatDate(isoString) {
+      return new Date(isoString).toLocaleDateString();
+    }
+    
+    function urlBase64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding)
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+      
+      const rawData = window.atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+      
+      for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+      }
+      return outputArray;
+    }
+    
+    // Start the app
+    init();
+    
+    // Dismiss setup instructions
+    document.getElementById('dismiss-setup')?.addEventListener('click', () => {
+      document.getElementById('setup-instructions').style.display = 'none';
+      localStorage.setItem('codeBabaSetupDismissed', 'true');
+    });
+    
+    // Hide setup if already dismissed
+    if (localStorage.getItem('codeBabaSetupDismissed') === 'true') {
+      const setupEl = document.getElementById('setup-instructions');
+      if (setupEl) setupEl.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
