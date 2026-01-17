@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#f59e0b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Code-Baba">
+  <title>Code-Baba</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      min-height: 100vh;
+      color: #1f2937;
+    }
+    .container { max-width: 480px; margin: 0 auto; padding: 20px; min-height: 100vh; }
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+    }
+    .logo { text-align: center; margin-bottom: 20px; }
+    .logo-icon { font-size: 48px; margin-bottom: 8px; }
+    h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 8px; }
+    .subtitle { text-align: center; color: #6b7280; font-size: 14px; margin-bottom: 24px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; color: #374151; font-size: 14px; }
+    input, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus { outline: none; border-color: #f59e0b; }
+    input.error { border-color: #ef4444; }
+    .field-error { color: #ef4444; font-size: 12px; margin-top: 4px; }
+    textarea { resize: none; height: 120px; }
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+    }
+    .btn-secondary { background: #f3f4f6; color: #374151; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .status { text-align: center; padding: 12px; border-radius: 10px; margin-bottom: 16px; font-size: 14px; }
+    .status.success { background: #d1fae5; color: #065f46; }
+    .status.error { background: #fee2e2; color: #991b1b; }
+    .hidden { display: none !important; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .header h2 { font-size: 18px; }
+    .logout-btn { background: none; border: none; color: #6b7280; font-size: 14px; cursor: pointer; padding: 8px; }
+    .logout-btn:hover { color: #ef4444; }
+    .message-item { padding: 16px; background: #f9fafb; border-radius: 12px; margin-bottom: 12px; }
+    .message-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .message-sender { font-weight: 600; color: #d97706; font-size: 14px; }
+    .message-time { font-size: 12px; color: #9ca3af; }
+    .message-text { color: #374151; line-height: 1.5; }
+    .member-item { display: flex; align-items: center; padding: 12px; background: #f9fafb; border-radius: 10px; margin-bottom: 8px; }
+    .member-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 600; margin-right: 12px; flex-shrink: 0;
+    }
+    .member-info { flex: 1; min-width: 0; }
+    .member-name { font-weight: 600; }
+    .member-details { font-size: 12px; color: #9ca3af; }
+    .member-actions { display: flex; gap: 8px; }
+    .member-actions button { background: none; border: none; cursor: pointer; padding: 4px; font-size: 16px; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .tab {
+      flex: 1; padding: 12px; border: none; background: #f3f4f6;
+      border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; color: #6b7280;
+    }
+    .tab.active { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; }
+    .install-prompt { background: #fef3c7; color: #92400e; padding: 16px; border-radius: 12px; margin-bottom: 16px; text-align: center; }
+    .install-prompt button { margin-top: 12px; padding: 10px 20px; background: #f59e0b; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .char-count { text-align: right; font-size: 12px; color: #9ca3af; margin-top: 4px; }
+    .empty-state { text-align: center; padding: 40px 20px; color: #9ca3af; }
+    .empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+    .toggle-mode { text-align: center; margin-top: 16px; }
+    .toggle-mode a { color: #d97706; text-decoration: none; font-size: 14px; }
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); display: flex; align-items: center;
+      justify-content: center; z-index: 1000; padding: 20px;
+    }
+    .modal { background: white; border-radius: 20px; padding: 24px; width: 100%; max-width: 400px; }
+    .modal h3 { margin-bottom: 16px; }
+    .modal-buttons { display: flex; gap: 12px; margin-top: 20px; }
+    .modal-buttons .btn { flex: 1; }
+    .checkbox-group { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .checkbox-group input { width: auto; }
+    .checkbox-group label { margin-bottom: 0; font-weight: normal; }
+    .add-member-btn { margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Login Screen -->
+    <div id="login-screen" class="card">
+      <div class="logo">
+        <div class="logo-icon">🧙</div>
+        <h1>Code-Baba</h1>
+        <p class="subtitle">Instant notifications for your crew</p>
+      </div>
+      <div id="login-status" class="status hidden"></div>
+      <div class="form-group">
+        <label for="login-name">Your Name</label>
+        <input type="text" id="login-name" placeholder="Enter your name" maxlength="30">
+      </div>
+      <div class="form-group">
+        <label for="login-code">Invite Code</label>
+        <input type="text" id="login-code" placeholder="Enter group or admin code" autocapitalize="characters">
+      </div>
+      <button id="login-btn" class="btn btn-primary">Login</button>
+      <div class="toggle-mode">
+        <a href="#" id="show-join">New member? Join here</a>
+      </div>
+    </div>
+
+    <!-- Join Screen -->
+    <div id="join-screen" class="card hidden">
+      <div class="logo">
+        <div class="logo-icon">🧙</div>
+        <h1>Code-Baba</h1>
+        <p class="subtitle">Instant notifications for your crew</p>
+      </div>
+      <div id="join-status" class="status hidden"></div>
+      <div class="form-group">
+        <label for="join-name">Your Name</label>
+        <input type="text" id="join-name" placeholder="What should we call you?" maxlength="30">
+        <div id="join-name-error" class="field-error hidden"></div>
+      </div>
+      <div class="form-group">
+        <label for="join-phone">Phone Number <span style="color: #9ca3af; font-weight: normal;">(for SMS)</span></label>
+        <input type="tel" id="join-phone" placeholder="(555) 123-4567" maxlength="20">
+      </div>
+      <div class="form-group">
+        <label for="join-code">Invite Code</label>
+        <input type="text" id="join-code" placeholder="Enter group or admin code" autocapitalize="characters">
+      </div>
+      <button id="join-btn" class="btn btn-primary">Join Group</button>
+      <div class="toggle-mode">
+        <a href="#" id="show-login">Already a member? Login here</a>
+      </div>
+    </div>
+
+    <!-- App Screen -->
+    <div id="app-screen" class="hidden">
+      <div id="install-banner" class="install-prompt hidden">
+        <strong>📱 Install the app</strong>
+        <p>Add to home screen for the best experience</p>
+        <button id="install-btn">Install</button>
+      </div>
+      <div class="card">
+        <div class="header">
+          <h2>🧙 Code-Baba</h2>
+          <button class="logout-btn" id="logout-btn">Logout</button>
+        </div>
+        <!-- Admin Section -->
+        <div id="admin-section" class="hidden">
+          <div class="tabs">
+            <button class="tab active" data-tab="send">Send</button>
+            <button class="tab" data-tab="messages">Messages</button>
+            <button class="tab" data-tab="members">Members</button>
+          </div>
+          <div id="send-tab">
+            <div id="send-status" class="status hidden"></div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" placeholder="Write your message..." maxlength="500"></textarea>
+              <div class="char-count"><span id="char-count">0</span>/500</div>
+            </div>
+            <button id="send-btn" class="btn btn-primary">📢 Send to Everyone</button>
+          </div>
+          <div id="messages-tab" class="hidden">
+            <div id="messages-list"></div>
+          </div>
+          <div id="members-tab" class="hidden">
+            <button id="add-member-btn" class="btn btn-secondary add-member-btn">+ Add Member</button>
+            <div id="members-list"></div>
+          </div>
+        </div>
+        <!-- Member Section -->
+        <div id="member-section" class="hidden">
+          <div id="member-status" class="status success">✅ You'll receive notifications when there's an update.</div>
+          <h3 style="margin: 20px 0 12px;">Recent Messages</h3>
+          <div id="member-messages-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add/Edit Member Modal -->
+    <div id="member-modal" class="modal-overlay hidden">
+      <div class="modal">
+        <h3 id="modal-title">Add Member</h3>
+        <div id="modal-status" class="status hidden"></div>
+        <div class="form-group">
+          <label for="modal-name">Name</label>
+          <input type="text" id="modal-name" placeholder="Member name" maxlength="30">
+          <div id="modal-name-error" class="field-error hidden"></div>
+        </div>
+        <div class="form-group">
+          <label for="modal-phone">Phone Number</label>
+          <input type="tel" id="modal-phone" placeholder="(555) 123-4567" maxlength="20">
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="modal-admin">
+          <label for="modal-admin">Admin privileges</label>
+        </div>
+        <div class="modal-buttons">
+          <button id="modal-cancel" class="btn btn-secondary">Cancel</button>
+          <button id="modal-save" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div id="delete-modal" class="modal-overlay hidden">
+      <div class="modal">
+        <h3>Delete Member</h3>
+        <p id="delete-message">Are you sure you want to delete this member?</p>
+        <div class="modal-buttons">
+          <button id="delete-cancel" class="btn btn-secondary">Cancel</button>
+          <button id="delete-confirm" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let isAdmin = false, userName = '', adminCode = '', deferredPrompt = null;
+    let editingMemberId = null, deletingMemberId = null;
+
+    const loginScreen = document.getElementById('login-screen');
+    const joinScreen = document.getElementById('join-screen');
+    const appScreen = document.getElementById('app-screen');
+    const adminSection = document.getElementById('admin-section');
+    const memberSection = document.getElementById('member-section');
+    const installBanner = document.getElementById('install-banner');
+    const memberModal = document.getElementById('member-modal');
+    const deleteModal = document.getElementById('delete-modal');
+
+    async function init() {
+      const savedData = localStorage.getItem('codeBaba');
+      if (savedData) {
+        const data = JSON.parse(savedData);
+        userName = data.name;
+        isAdmin = data.isAdmin;
+        adminCode = data.adminCode || '';
+        showAppScreen();
+      }
+      if ('serviceWorker' in navigator) {
+        try { await navigator.serviceWorker.register('/sw.js'); } catch (e) { console.error(e); }
+      }
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBanner.classList.remove('hidden');
+      });
+      document.getElementById('install-btn').addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          await deferredPrompt.userChoice;
+          deferredPrompt = null;
+          installBanner.classList.add('hidden');
+        }
+      });
+    }
+
+    document.getElementById('show-join').addEventListener('click', (e) => {
+      e.preventDefault();
+      loginScreen.classList.add('hidden');
+      joinScreen.classList.remove('hidden');
+    });
+
+    document.getElementById('show-login').addEventListener('click', (e) => {
+      e.preventDefault();
+      joinScreen.classList.add('hidden');
+      loginScreen.classList.remove('hidden');
+    });
+
+    document.getElementById('login-btn').addEventListener('click', async () => {
+      const name = document.getElementById('login-name').value.trim();
+      const code = document.getElementById('login-code').value.trim().toUpperCase();
+      if (!name || !code) { showStatus('login-status', 'Please enter name and code', 'error'); return; }
+      const btn = document.getElementById('login-btn');
+      btn.disabled = true; btn.textContent = 'Logging in...';
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, code })
+        });
+        const data = await res.json();
+        if (data.success) {
+          userName = data.name; isAdmin = data.isAdmin; adminCode = isAdmin ? code : '';
+          localStorage.setItem('codeBaba', JSON.stringify({ name: userName, isAdmin, adminCode }));
+          showAppScreen();
+        } else {
+          showStatus('login-status', data.error || 'Login failed', 'error');
+        }
+      } catch (e) { showStatus('login-status', 'Login failed', 'error'); }
+      btn.disabled = false; btn.textContent = 'Login';
+    });
+
+    document.getElementById('join-btn').addEventListener('click', async () => {
+      const name = document.getElementById('join-name').value.trim();
+      const phone = document.getElementById('join-phone').value.trim();
+      const code = document.getElementById('join-code').value.trim().toUpperCase();
+      if (!name || !code) { showStatus('join-status', 'Please enter name and code', 'error'); return; }
+      const btn = document.getElementById('join-btn');
+      btn.disabled = true; btn.textContent = 'Joining...';
+      try {
+        const verifyRes = await fetch('/api/verify-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code })
+        });
+        const verifyData = await verifyRes.json();
+        if (!verifyData.valid) { showStatus('join-status', 'Invalid code', 'error'); btn.disabled = false; btn.textContent = 'Join Group'; return; }
+        let subscription = null;
+        if ('Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window) {
+          try {
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+              const vapidRes = await fetch('/api/vapid-public-key');
+              const { publicKey } = await vapidRes.json();
+              const registration = await navigator.serviceWorker.ready;
+              subscription = await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(publicKey) });
+            }
+          } catch (e) { console.log('Push not available'); }
+        }
+        const subRes = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ subscription, name, code, phone })
+        });
+        const subData = await subRes.json();
+        if (subData.success) {
+          isAdmin = subData.isAdmin; userName = name; adminCode = isAdmin ? code : '';
+          localStorage.setItem('codeBaba', JSON.stringify({ name: userName, isAdmin, adminCode }));
+          showAppScreen();
+        } else { showStatus('join-status', subData.error || 'Failed to join', 'error'); }
+      } catch (e) { showStatus('join-status', 'Failed to join', 'error'); }
+      btn.disabled = false; btn.textContent = 'Join Group';
+    });
+
+    document.getElementById('join-name').addEventListener('blur', async (e) => {
+      const name = e.target.value.trim();
+      if (!name) return;
+      try {
+        const res = await fetch('/api/check-name', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name }) });
+        const data = await res.json();
+        const errorEl = document.getElementById('join-name-error');
+        if (!data.available) { e.target.classList.add('error'); errorEl.textContent = data.error; errorEl.classList.remove('hidden'); }
+        else { e.target.classList.remove('error'); errorEl.classList.add('hidden'); }
+      } catch (e) {}
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.removeItem('codeBaba');
+      userName = ''; isAdmin = false; adminCode = '';
+      appScreen.classList.add('hidden');
+      loginScreen.classList.remove('hidden');
+      document.getElementById('login-name').value = '';
+      document.getElementById('login-code').value = '';
+    });
+
+    document.getElementById('send-btn').addEventListener('click', async () => {
+      const message = document.getElementById('message').value.trim();
+      if (!message) { showStatus('send-status', 'Please enter a message', 'error'); return; }
+      const btn = document.getElementById('send-btn');
+      btn.disabled = true; btn.textContent = 'Sending...';
+      try {
+        const res = await fetch('/api/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message, adminCode, senderName: userName })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showStatus('send-status', `✅ Sent! Push: ${data.results.sent}, SMS: ${data.smsResults?.sent || 0}`, 'success');
+          document.getElementById('message').value = '';
+          document.getElementById('char-count').textContent = '0';
+          loadMessages();
+        } else { showStatus('send-status', data.error || 'Failed', 'error'); }
+      } catch (e) { showStatus('send-status', 'Failed to send', 'error'); }
+      btn.disabled = false; btn.textContent = '📢 Send to Everyone';
+    });
+
+    document.getElementById('message').addEventListener('input', (e) => {
+      document.getElementById('char-count').textContent = e.target.value.length;
+    });
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabName = tab.dataset.tab;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('send-tab').classList.add('hidden');
+        document.getElementById('messages-tab').classList.add('hidden');
+        document.getElementById('members-tab').classList.add('hidden');
+        document.getElementById(tabName + '-tab').classList.remove('hidden');
+        if (tabName === 'messages') loadMessages();
+        if (tabName === 'members') loadMembers();
+      });
+    });
+
+    document.getElementById('add-member-btn').addEventListener('click', () => {
+      editingMemberId = null;
+      document.getElementById('modal-title').textContent = 'Add Member';
+      document.getElementById('modal-name').value = '';
+      document.getElementById('modal-phone').value = '';
+      document.getElementById('modal-admin').checked = false;
+      document.getElementById('modal-name-error').classList.add('hidden');
+      document.getElementById('modal-status').classList.add('hidden');
+      memberModal.classList.remove('hidden');
+    });
+
+    document.getElementById('modal-cancel').addEventListener('click', () => { memberModal.classList.add('hidden'); });
+
+    document.getElementById('modal-save').addEventListener('click', async () => {
+      const name = document.getElementById('modal-name').value.trim();
+      const phone = document.getElementById('modal-phone').value.trim();
+      const isAdminMember = document.getElementById('modal-admin').checked;
+      if (!name) { document.getElementById('modal-name-error').textContent = 'Name required'; document.getElementById('modal-name-error').classList.remove('hidden'); return; }
+      const btn = document.getElementById('modal-save');
+      btn.disabled = true; btn.textContent = 'Saving...';
+      try {
+        let res;
+        if (editingMemberId) {
+          res = await fetch('/api/admin/members/' + editingMemberId, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Admin-Code': adminCode }, body: JSON.stringify({ name, phone, isAdmin: isAdminMember }) });
+        } else {
+          res = await fetch('/api/admin/members', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Code': adminCode }, body: JSON.stringify({ name, phone, isAdmin: isAdminMember }) });
+        }
+        const data = await res.json();
+        if (data.success) { memberModal.classList.add('hidden'); loadMembers(); }
+        else { showStatus('modal-status', data.error || 'Failed', 'error'); }
+      } catch (e) { showStatus('modal-status', 'Failed to save', 'error'); }
+      btn.disabled = false; btn.textContent = 'Save';
+    });
+
+    document.getElementById('delete-cancel').addEventListener('click', () => { deleteModal.classList.add('hidden'); });
+
+    document.getElementById('delete-confirm').addEventListener('click', async () => {
+      if (!deletingMemberId) return;
+      const btn = document.getElementById('delete-confirm');
+      btn.disabled = true; btn.textContent = 'Deleting...';
+      try {
+        const res = await fetch('/api/admin/members/' + deletingMemberId, { method: 'DELETE', headers: { 'X-Admin-Code': adminCode } });
+        const data = await res.json();
+        if (data.success) { deleteModal.classList.add('hidden'); loadMembers(); }
+        else { alert(data.error || 'Failed'); }
+      } catch (e) { alert('Failed to delete'); }
+      btn.disabled = false; btn.textContent = 'Delete';
+    });
+
+    function showAppScreen() {
+      loginScreen.classList.add('hidden');
+      joinScreen.classList.add('hidden');
+      appScreen.classList.remove('hidden');
+      if (isAdmin) { adminSection.classList.remove('hidden'); memberSection.classList.add('hidden'); loadMessages(); loadMembers(); }
+      else { adminSection.classList.add('hidden'); memberSection.classList.remove('hidden'); loadMemberMessages(); }
+    }
+
+    async function loadMessages() {
+      try {
+        const res = await fetch('/api/messages');
+        const messages = await res.json();
+        const list = document.getElementById('messages-list');
+        if (messages.length === 0) { list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No messages yet</p></div>'; return; }
+        list.innerHTML = messages.map(msg => '<div class="message-item"><div class="message-header"><span class="message-sender">' + escapeHtml(msg.sender) + '</span><span class="message-time">' + formatTime(msg.sentAt) + '</span></div><div class="message-text">' + escapeHtml(msg.text) + '</div></div>').join('');
+      } catch (e) { console.error(e); }
+    }
+
+    async function loadMemberMessages() {
+      try {
+        const res = await fetch('/api/messages');
+        const messages = await res.json();
+        const list = document.getElementById('member-messages-list');
+        if (messages.length === 0) { list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No messages yet</p></div>'; return; }
+        list.innerHTML = messages.map(msg => '<div class="message-item"><div class="message-header"><span class="message-sender">' + escapeHtml(msg.sender) + '</span><span class="message-time">' + formatTime(msg.sentAt) + '</span></div><div class="message-text">' + escapeHtml(msg.text) + '</div></div>').join('');
+      } catch (e) { console.error(e); }
+    }
+
+    async function loadMembers() {
+      try {
+        const res = await fetch('/api/members', { headers: { 'X-Admin-Code': adminCode } });
+        const members = await res.json();
+        const list = document.getElementById('members-list');
+        if (members.length === 0) { list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👥</div><p>No members yet</p></div>'; return; }
+        list.innerHTML = members.map(m => '<div class="member-item"><div class="member-avatar">' + m.name.charAt(0).toUpperCase() + '</div><div class="member-info"><div class="member-name">' + escapeHtml(m.name) + (m.isAdmin ? ' 👑' : '') + '</div><div class="member-details">' + (m.hasPhone ? '📱' : '') + (m.hasPush ? '🔔' : '') + ' Joined ' + formatDate(m.joinedAt) + '</div></div><div class="member-actions"><button onclick="editMember(\'' + m.id + '\',\'' + escapeHtml(m.name).replace(/'/g, "\\'") + '\',\'' + (m.phone || '') + '\',' + m.isAdmin + ')">✏️</button><button onclick="confirmDelete(\'' + m.id + '\',\'' + escapeHtml(m.name).replace(/'/g, "\\'") + '\')">🗑️</button></div></div>').join('');
+      } catch (e) { console.error(e); }
+    }
+
+    function editMember(id, name, phone, isAdminMember) {
+      editingMemberId = id;
+      document.getElementById('modal-title').textContent = 'Edit Member';
+      document.getElementById('modal-name').value = name;
+      document.getElementById('modal-phone').value = phone || '';
+      document.getElementById('modal-admin').checked = isAdminMember;
+      document.getElementById('modal-name-error').classList.add('hidden');
+      document.getElementById('modal-status').classList.add('hidden');
+      memberModal.classList.remove('hidden');
+    }
+
+    function confirmDelete(id, name) {
+      deletingMemberId = id;
+      document.getElementById('delete-message').textContent = 'Are you sure you want to delete ' + name + '?';
+      deleteModal.classList.remove('hidden');
+    }
+
+    function showStatus(id, msg, type) {
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.className = 'status ' + type;
+      el.classList.remove('hidden');
+      if (type === 'success') setTimeout(() => el.classList.add('hidden'), 3000);
+    }
+
+    function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+
+    function formatTime(iso) {
+      const d = new Date(iso), now = new Date(), diff = now - d;
+      if (diff < 60000) return 'Just now';
+      if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
+      if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
+      return d.toLocaleDateString();
+    }
+
+    function formatDate(iso) { return new Date(iso).toLocaleDateString(); }
+
+    function urlBase64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+      const rawData = window.atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+      for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+      return outputArray;
+    }
+
+    init();
+  </script>
+</body>
+</html>
